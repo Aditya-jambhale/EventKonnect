@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { DayPicker } from 'react-day-picker'
 import { ChevronLeft, ChevronRight, Calendar, Users } from 'lucide-react'
 import 'react-day-picker/dist/style.css'
-import { database, ref, get } from '@/lib/firebase'
+import { database, ref,get } from '@/lib/firebase'
 
 const categories = ['All', 'Tech', 'Business', 'Marketing']
 

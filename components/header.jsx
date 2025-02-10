@@ -35,7 +35,7 @@ export function Header() {
                                 <Link href="/app/create-event" className="text-lg hover:text-purple-600">
                                     Create Event
                                 </Link>
-                                <Link href="/notifications" className="text-lg hover:text-purple-600">
+                                <Link href="/app/notfications" className="text-lg hover:text-purple-600">
                                     Notifications
                                 </Link>
                                 <Link href="/app/profile" className="text-lg hover:text-purple-600">
@@ -55,7 +55,7 @@ export function Header() {
                     <div className="flex-1">
                         <input
                             type="text"
-                            placeholder="Search..."
+                            placeholder="Search events..."
                             className="w-full py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 text-black"
                         />
                     </div>
