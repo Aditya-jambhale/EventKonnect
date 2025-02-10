@@ -19,7 +19,7 @@ const routes = [
     {
         label: "Dashboard",
         icon: LayoutDashboard,
-        href: "/app/admin",
+        href: "/admin",
         emoji: "🎯",
     },
     {

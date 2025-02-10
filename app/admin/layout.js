@@ -1,5 +1,6 @@
 "use client";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Sidebar } from "@/components/sidebaradmin";
 
 export default function DashboardLayout({ children }) {
@@ -8,6 +9,7 @@ export default function DashboardLayout({ children }) {
             <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-80 bg-gray-900">
                 <Sidebar />
             </div>
+            <ToastContainer />
             <main className="md:pl-72">{children}</main>
         </div>
     );
