@@ -1,85 +1,95 @@
-"use client"
-import { Header } from "@/components/header"
-import { EventCard } from "@/components/event-card"
-import { events, userGroups } from "@/data/events"
-import { Button } from "@/components/ui/button"
-import { useRef, useState } from "react"
-import { DayPicker } from "react-day-picker"
-import { ChevronLeft, ChevronRight, Calendar, Users } from "lucide-react"
+'use client'
 
-const categories = ["All", "Tech", "Business", "Marketing"]
+import { useRef, useState } from 'react'
+import { Header } from '@/components/header'
+import { EventCard } from '@/components/events-card'
+import { events, userGroups } from '@/data/events'
+import { Button } from '@/components/ui/button'
+import { DayPicker } from 'react-day-picker'
+import { ChevronLeft, ChevronRight, Calendar, Users } from 'lucide-react'
+import 'react-day-picker/dist/style.css'
+
+const categories = ['All', 'Tech', 'Business', 'Marketing']
 
 export default function Home() {
   const scrollContainerRef = useRef(null)
-  const [selectedDate, setSelectedDate] = useState()
+  const [selectedDate, setSelectedDate] = useState(null)
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -200, behavior: "smooth" })
+      scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' })
     }
   }
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 200, behavior: "smooth" })
+      scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' })
     }
   }
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container max-w-screen-2xl py-6 px-4 md:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6">
+      <main className="container mx-auto py-8 px-4 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
           {/* Sidebar with Calendar and Groups */}
-          <aside className="space-y-6 w-full max-w-sm mx-auto md:mx-0">
+          <aside className="space-y-8">
             {/* Date Picker Header */}
-            <div className="flex items-center justify-between bg-card p-3 rounded-lg shadow-md">
-              <span className="text-sm font-medium">
-                {selectedDate ? selectedDate.toDateString() : "Select Date"}
+            <div className="flex items-center justify-between bg-background p-4 rounded-lg shadow-md border border-gray-300">
+              <span className="text-sm font-medium text-white">
+                {selectedDate ? selectedDate.toDateString() : 'Select Date'}
               </span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2 text-white border-gray-400 hover:bg-gray-800"
               >
                 <Calendar className="w-4 h-4" />
                 Pick Date
               </Button>
             </div>
 
-            {/* Responsive Calendar */}
-            <div className="rounded-lg bg-card p-4 shadow-md">
+            {/* Calendar */}
+            <div className="rounded-lg bg-background p-4 shadow-md border border-white">
               <DayPicker
                 showOutsideDays
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 className="w-full"
+                classNames={{
+                  day_selected: "bg-primary text-primary-foreground",
+                  day_today: "bg-accent text-accent-foreground",
+                  day: "hover:bg-gray-800 rounded-md"
+                }}
                 components={{
-                  IconLeft: () => <ChevronLeft className="h-4 w-4" />, 
-                  IconRight: () => <ChevronRight className="h-4 w-4" />, 
+                  IconLeft: () => <ChevronLeft className="h-4 w-4 text-white" />,
+                  IconRight: () => <ChevronRight className="h-4 w-4 text-white" />,
                 }}
               />
             </div>
 
             {/* User Groups */}
-            <div className="rounded-lg border border-purple-500/20 p-7">
-              <h2 className="flex items-center font-semibold mb-4">
-                <Users className="h-4 w-5 mr-2" />
+            <div className="rounded-lg border border-white p-6 bg-background">
+              <h2 className="flex items-center font-semibold mb-6 text-white text-lg">
+                <Users className="h-5 w-5 mr-2 text-white" />
                 Your Groups
               </h2>
               {userGroups.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {userGroups.map((group) => (
-                    <div key={group.id} className="flex items-center gap-3">
+                    <div 
+                      key={group.id} 
+                      className="flex items-center gap-4 hover:bg-gray-800 p-3 rounded-lg transition-colors"
+                    >
                       <img
-                        src={group.image || "/placeholder.svg"}
+                        src={group.image || '/placeholder.svg'}
                         alt={group.name}
-                        className="rounded-full w-10 h-10"
+                        className="rounded-full w-12 h-12 object-cover"
                       />
                       <div>
-                        <h3 className="font-medium">{group.name}</h3>
-                        <p className="text-sm text-muted-foreground">
+                        <h3 className="font-medium text-white mb-1">{group.name}</h3>
+                        <p className="text-sm text-gray-300">
                           {group.members} members
                         </p>
                       </div>
@@ -87,39 +97,55 @@ export default function Home() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">
-                  No groups joined yet
-                </p>
+                <p className="text-sm text-gray-400 text-center py-4">No groups joined yet</p>
               )}
             </div>
           </aside>
 
           {/* Events Section */}
-          <section className="space-y-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <h2 className="font-semibold text-xl text-center sm:text-left">
+          <section className="space-y-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+              <h2 className="font-semibold text-2xl text-white">
                 🌟 Epic events coming your way! 🌟
               </h2>
-              <div className="flex gap-2">
-                <Button variant="outline" size="icon" onClick={scrollLeft}>
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={scrollLeft} 
+                  className="text-white border-gray-400 hover:bg-gray-800"
+                >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="icon" onClick={scrollRight}>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={scrollRight} 
+                  className="text-white border-gray-400 hover:bg-gray-800"
+                >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>
+
+            {/* Categories */}
             <div
               ref={scrollContainerRef}
-              className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
+              className="flex gap-4 overflow-x-auto scrollbar-hide pb-6 -mx-2 px-2"
             >
               {categories.map((category) => (
-                <Button key={category} variant="outline" className="shrink-0">
+                <Button 
+                  key={category} 
+                  variant="outline" 
+                  className="shrink-0 text-white border-gray-400 hover:bg-gray-800 px-6"
+                >
                   {category}
                 </Button>
               ))}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {/* Events Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {events.map((event) => (
                 <EventCard key={event.id} {...event} />
               ))}
