@@ -1,19 +1,49 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Header } from '@/components/header'
 import { EventCard } from '@/components/events-card'
-import { events, userGroups } from '@/data/events'
 import { Button } from '@/components/ui/button'
 import { DayPicker } from 'react-day-picker'
 import { ChevronLeft, ChevronRight, Calendar, Users } from 'lucide-react'
 import 'react-day-picker/dist/style.css'
+import { database, ref, get } from '@/lib/firebase'
 
 const categories = ['All', 'Tech', 'Business', 'Marketing']
 
 export default function Home() {
   const scrollContainerRef = useRef(null)
   const [selectedDate, setSelectedDate] = useState(null)
+  const [events, setEvents] = useState([])
+  const [userGroups, setUserGroups] = useState([])
+  const [isClient, setIsClient] = useState(false)
+
+  // Handle client-side mounting
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Fetch data from Firebase
+  useEffect(() => {
+    if (!isClient) return; // Only fetch data on client-side
+
+    const fetchData = async () => {
+      try {
+        const eventsSnapshot = await get(ref(database, 'events'))
+        const groupsSnapshot = await get(ref(database, 'userGroups'))
+
+        if (eventsSnapshot.exists()) {
+          setEvents(Object.values(eventsSnapshot.val()))
+        }
+        if (groupsSnapshot.exists()) {
+          setUserGroups(Object.values(groupsSnapshot.val()))
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchData()
+  }, [isClient])
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -25,6 +55,18 @@ export default function Home() {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' })
     }
+  }
+
+  // Return null or loading state during server-side rendering
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container mx-auto py-8 px-4 lg:px-8">
+          <div className="text-center text-gray-400">Loading...</div>
+        </main>
+      </div>
+    )
   }
 
   return (
@@ -146,9 +188,13 @@ export default function Home() {
 
             {/* Events Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {events.map((event) => (
-                <EventCard key={event.id} {...event} />
-              ))}
+              {events.length > 0 ? (
+                events.map((event) => (
+                  <EventCard key={event.id} {...event} />
+                ))
+              ) : (
+                <p className="text-center text-gray-400">Loading events...</p>
+              )}
             </div>
           </section>
         </div>

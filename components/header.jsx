@@ -32,13 +32,13 @@ export function Header() {
                                 <Link href="/" className="text-lg font-semibold hover:text-purple-600">
                                     Home
                                 </Link>
-                                <Link href="/create-event" className="text-lg hover:text-purple-600">
+                                <Link href="/app/create-event" className="text-lg hover:text-purple-600">
                                     Create Event
                                 </Link>
                                 <Link href="/notifications" className="text-lg hover:text-purple-600">
                                     Notifications
                                 </Link>
-                                <Link href="/profile" className="text-lg hover:text-purple-600">
+                                <Link href="/app/profile" className="text-lg hover:text-purple-600">
                                     Profile
                                 </Link>
                             </nav>
