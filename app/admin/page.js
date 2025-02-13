@@ -5,7 +5,6 @@ import { database, ref, get } from "@/lib/firebase";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Users, Heart, ChevronRight } from "lucide-react";
-
 import Link from "next/link";
 
 async function fetchEvents() {
