@@ -32,7 +32,7 @@ export function Header() {
                                 <Link href="/" className="text-lg font-semibold hover:text-purple-600">
                                     Home
                                 </Link>
-                                <Link href="/app/create-event" className="text-lg hover:text-purple-600">
+                                <Link href="/admin" className="text-lg hover:text-purple-600">
                                     Create Event
                                 </Link>
                                 <Link href="/app/notfications" className="text-lg hover:text-purple-600">
@@ -71,7 +71,7 @@ export function Header() {
                     </div>
 
                     {/* Create Event Button */}
-                    <Link href="/create-event">
+                    <Link href="/admin">
                         <Button variant="default" className="bg-purple-600 hover:bg-purple-700 text-sm md:text-base text-white">
                             Create Event
                         </Button>

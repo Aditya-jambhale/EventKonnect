@@ -10,7 +10,6 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -71,7 +70,7 @@ export function CreateEventForm() {
             toast.success("Event created successfully.PLease visit to Dashboard:)");
 
             form.reset();
-            
+
             router.refresh();
         } catch (error) {
             console.error("Error creating event:", error);
