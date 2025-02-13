@@ -1,7 +1,21 @@
 /** @type {import('next').NextConfig} */
-import withPWA from "@ducanh2912/next-pwa"
+import withPWA from "@ducanh2912/next-pwa";
 
-const nextConfig = {};
+const nextConfig = {
+    images: {
+        domains: [
+            "i0.wp.com",
+            "www.shutterstock.com",
+            "assets.entrepreneur.com"
+        ],
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "**",
+            },
+        ],
+    },
+};
 
 export default withPWA({
     dest: "public",

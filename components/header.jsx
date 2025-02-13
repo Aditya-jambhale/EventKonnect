@@ -1,6 +1,7 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
@@ -8,6 +9,64 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBell } from "@fortawesome/free-solid-svg-icons";
 
 export function Header() {
+    const [userLocation, setUserLocation] = useState("Fetching location...");
+    const [searchLocation, setSearchLocation] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+
+    // Fetch user's current location and perform reverse geocoding
+    useEffect(() => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const apiKey = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY; // Fetch API key from .env.local
+                        const { latitude, longitude } = position.coords;
+                        
+                        const response = await fetch(
+                            `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
+                        );
+                        const data = await response.json();
+                        
+                        if (data.results?.[0]?.components?.city) {
+                            setUserLocation(data.results[0].components.city);
+                        } else {
+                            setUserLocation("Location not found");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching location:", error);
+                        setUserLocation("Unable to fetch location");
+                    }
+                },
+                (error) => {
+                    console.error("Geolocation error:", error);
+                    setUserLocation("Location access denied");
+                }
+            );
+        } else {
+            setUserLocation("Geolocation not supported");
+        }
+    }, []);
+
+    // Handle manual location search
+    const handleLocationSearch = async (searchInput) => {
+        try {
+            setIsSearching(true);
+            const apiKey = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY;
+            const response = await fetch(
+                `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(searchInput)}&key=${apiKey}`
+            );
+            const data = await response.json();
+
+            if (data.results?.[0]?.components?.city) {
+                setSearchLocation(data.results[0].components.city);
+            }
+        } catch (error) {
+            console.error("Error searching location:", error);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
     return (
         <header className="sticky top-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
@@ -60,14 +119,21 @@ export function Header() {
                         />
                     </div>
 
-                    {/* Locations Dropdown */}
-                    <div className="flex items-center space-x-2">
-                        <span className="text-sm md:text-base">Locations</span>
-                        <select className="border border-gray-300 rounded-lg py-2 px-3 text-sm md:text-base text-black">
-                            <option>Mumbai</option>
-                            <option>Delhi</option>
-                            <option>Gujarat</option>
-                        </select>
+                    {/* Location Input */}
+                    <div className="relative flex items-center">
+                        <MapPin className="absolute left-3 text-black h-5 w-5" />
+                        <input
+                            type="text"
+                            placeholder={userLocation}
+                            value={searchLocation}
+                            onChange={(e) => setSearchLocation(e.target.value)}
+                            onKeyPress={(e) => {
+                                if (e.key === "Enter") {
+                                    handleLocationSearch(e.target.value);
+                                }
+                            }}
+                            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 text-black w-48"
+                        />
                     </div>
 
                     {/* Create Event Button */}
@@ -88,6 +154,16 @@ export function Header() {
                     {/* Profile Icon */}
                     <Link href="/profile" className="relative">
                         <FontAwesomeIcon icon={faUser} className="text-lg hover:text-purple-600" />
+                    </Link>
+                </div>
+
+                {/* Mobile View - Location and Profile */}
+                <div className="flex md:hidden items-center space-x-4">
+                    <Button variant="ghost" size="icon" onClick={() => handleLocationSearch(userLocation)}>
+                        <MapPin className="h-5 w-5" />
+                    </Button>
+                    <Link href="/profile">
+                        <FontAwesomeIcon icon={faUser} className="text-lg" />
                     </Link>
                 </div>
             </div>

@@ -37,7 +37,7 @@ const routes = [
     {
         label: "Event Analytics",
         icon: TrendingUp,
-        href: "/dashboard/analytics",
+        href: "/admin/Analytics",
         emoji: "📈",
     },
     {
@@ -46,24 +46,14 @@ const routes = [
         href: "/dashboard/events",
         emoji: "🎪",
     },
-    {
-        label: "Attendees",
-        icon: Users,
-        href: "/dashboard/attendees",
-        emoji: "👥",
-    },
+
     {
         label: "Profile",
         icon: UserCircle,
         href: "/dashboard/profile",
         emoji: "👤",
     },
-    {
-        label: "Settings",
-        icon: Settings,
-        href: "/dashboard/settings",
-        emoji: "⚙️",
-    },
+
 ];
 
 export function Sidebar() {
