@@ -56,16 +56,6 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <meta name="theme-color" content="#8b38ff" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
-        />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/icons/logo-512.png" />
-        <link rel="apple-touch-icon" href="/icons/logo-512.png" />
-      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
