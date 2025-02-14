@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { CreateEventAIForm } from "@/components/create-event-ai-from";
-import { CreateEventForm } from "@/components/create-event-form";
+import { EventFormAI } from "@/components/create-event-form-AI";
 
 const CreateEventPage = () => {
   const [showCreateEventForm, setShowCreateEventForm] = useState(false);
@@ -46,7 +46,7 @@ const CreateEventPage = () => {
               Fill in the details below to create a new event.
             </p>
           </div>
-          {eventDetails && <CreateEventForm eventDetails={eventDetails} />}
+          {eventDetails && <EventFormAI eventDetails={eventDetails} />}
         </div>
       )}
     </div>

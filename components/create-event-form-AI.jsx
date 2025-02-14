@@ -32,7 +32,7 @@ const formSchema = z.object({
     price: z.string().min(1, "Please enter a price"),
 });
 
-export function CreateEventForm({eventDetails}) {
+export function EventFormAI({eventDetails}) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 

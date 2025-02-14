@@ -1,4 +1,4 @@
-import { CreateEventForm } from "@/components/create-event-form"
+import EventForm from "@/components/create-event-form-manual"
 
 export default function CreateEventPage() {
     return (
