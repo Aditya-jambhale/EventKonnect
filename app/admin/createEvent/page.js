@@ -7,7 +7,7 @@ export default function CreateEventPage() {
                 <h1 className="text-3xl font-bold">Create New Event</h1>
                 <p className="text-gray-500">Fill in the details below to create a new event.</p>
             </div>
-            <CreateEventForm />
+            <EventForm />
         </div>
     )
 }

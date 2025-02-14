@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { CreateEventAIForm } from "@/components/create-event-ai-from";
+import { CreateEventAIForm } from "@/components/create-event-ai-form";
 import { EventFormAI } from "@/components/create-event-form-AI";
 
 const CreateEventPage = () => {
