@@ -104,7 +104,7 @@ export default function DashboardPage() {
                                 <CardContent className="p-0">
                                     <div className="aspect-video relative">
                                         <img
-                                            src={event.image || "/placeholder.svg"}
+                                            src={event.imageUrl || "/placeholder.svg"}
                                             alt={event.title}
                                             className="object-cover w-full h-full rounded-t-lg"
                                         />
