@@ -1,48 +1,45 @@
 "use client";
 
 import React, { useState } from "react";
+import { signUp } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const validateName = (name) => /^[a-zA-Z ]{3,}$/.test(name);
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password) => password.length >= 6;
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!validateName(name)) newErrors.name = "Full Name must be at least 3 letters.";
+    if (!validateEmail(email)) newErrors.email = "Invalid email format.";
+    if (!validatePassword(password)) newErrors.password = "Password must be at least 6 characters.";
+    if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
-    if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match!");
-      return;
-    }
-
-    setErrorMessage("");
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/Users/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: name,
-          email: email,
-          password: password,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      // Redirect to login page after signup success
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1000);
+      await signUp(name, email, password, phone);
+      alert("User signed up successfully!");
+      router.push("/");
     } catch (error) {
-      setErrorMessage(error.message || "Something went wrong!");
+      setErrors({ submit: error.message || "Something went wrong!" });
     } finally {
       setLoading(false);
     }

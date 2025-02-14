@@ -1,75 +1,41 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, MapPin } from "lucide-react";
-import { FaUser, FaBell, FaMapMarkerAlt, FaSearch, FaCalendarPlus, FaChevronDown, FaPlus } from "react-icons/fa";
+import { Menu, X } from "lucide-react";
+import { FaUser, FaBell, FaMapMarkerAlt, FaSearch, FaChevronDown } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
+import Image from "next/image";
+import { auth } from "@/lib/firebase"; // Ensure Firebase is properly configured
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export function Header() {
-    const [userLocation, setUserLocation] = useState("Fetching location...");
-    const [searchLocation, setSearchLocation] = useState("");
-    const [isSearching, setIsSearching] = useState(false);
     const [user, setUser] = useState(null);
-    const [showAuthDropdown, setShowAuthDropdown] = useState(false);
+    const [dropdowns, setDropdowns] = useState({ city: false, auth: false });
 
     useEffect(() => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    try {
-                        const apiKey = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY;
-                        const { latitude, longitude } = position.coords;
-
-                        const response = await fetch(
-                            `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
-                        );
-                        const data = await response.json();
-
-                        if (data.results?.[0]?.components?.city) {
-                            setUserLocation(data.results[0].components.city);
-                        } else {
-                            setUserLocation("Location not found");
-                        }
-                    } catch (error) {
-                        console.error("Error fetching location:", error);
-                        setUserLocation("Unable to fetch location");
-                    }
-                },
-                (error) => {
-                    console.error("Geolocation error:", error);
-                    setUserLocation("Location access denied");
-                }
-            );
-        } else {
-            setUserLocation("Geolocation not supported");
-        }
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+        return () => unsubscribe();
     }, []);
 
-    const handleLocationSearch = async (searchInput) => {
-        try {
-            setIsSearching(true);
-            const apiKey = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY;
-            const response = await fetch(
-                `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(searchInput)}&key=${apiKey}`
-            );
-            const data = await response.json();
+    const handleLogout = async () => {
+        await signOut(auth);
+        setUser(null);
+    };
 
-            if (data.results?.[0]?.components?.city) {
-                setSearchLocation(data.results[0].components.city);
-            }
-        } catch (error) {
-            console.error("Error searching location:", error);
-        } finally {
-            setIsSearching(false);
-        }
+    const toggleDropdown = (dropdown) => {
+        setDropdowns((prev) => ({
+            ...prev,
+            [dropdown]: !prev[dropdown],
+        }));
     };
 
     return (
-        <header className="sticky top-0 z-50 border-b border-gray-700 bg-gray-900 shadow-lg backdrop-blur-md">
+        <header className="sticky top-0 z-50 border-b border-border/40 bg-gray-900 backdrop-blur-md">
             <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-6">
-                {/* Left Section - Mobile Menu & Logo */}
                 <div className="flex items-center space-x-4">
                     <Sheet>
                         <SheetTrigger asChild>
@@ -90,73 +56,63 @@ export function Header() {
                                 <Link href="/" className="text-lg font-semibold hover:text-purple-400">Home</Link>
                                 <Link href="/admin" className="text-lg hover:text-purple-400">Create Event</Link>
                                 <Link href="/notifications" className="text-lg hover:text-purple-400">Notifications</Link>
-                                <Link href="/profile" className="text-lg hover:text-purple-400">Profile</Link>
+                                {user && <Link href="/profile" className="text-lg hover:text-purple-400">Profile</Link>}
                             </nav>
                         </SheetContent>
                     </Sheet>
 
                     <Link href="/" className="flex items-center space-x-2">
-                        <FaCalendarPlus className="text-purple-400 text-3xl" />
+                        <Image src="/logo.webp" alt="Logo" width={40} height={40} className="rounded-full" />
                         <span className="font-bold text-white text-2xl">EventKonnect</span>
                     </Link>
                 </div>
 
-                {/* Middle Section - Search Bar */}
-                <div className="relative flex items-center w-64 md:w-80">
+                <div className="hidden md:flex flex-1 max-w-md relative">
                     <input
                         type="text"
-                        placeholder="Search location..."
-                        value={searchLocation}
-                        onChange={(e) => setSearchLocation(e.target.value)}
-                        onKeyPress={(e) => {
-                            if (e.key === "Enter") {
-                                handleLocationSearch(e.target.value);
-                            }
-                        }}
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 text-black w-full"
+                        placeholder="Search events..."
+                        className="w-full py-2 pl-4 pr-10 rounded-full bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-purple-600"
                     />
-                    <FaSearch className="absolute left-3 text-gray-600 h-5 w-5" />
+                    <FaSearch className="absolute right-3 top-2.5 text-gray-400 text-lg" />
                 </div>
 
-                {/* Create Event Button */}
-                <Link href="/admin">
-                    <Button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
-                        <FaPlus className="text-white" />
-                        <span>Create Event</span>
-                    </Button>
-                </Link>
+                <div className="hidden md:flex items-center space-x-6">
+                    <Link href="/admin">
+                        <Button className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 px-6 py-2 rounded-lg text-white shadow-lg transition-transform transform hover:scale-105">
+                            Create Event
+                        </Button>
+                    </Link>
 
-                {/* Profile/Login Dropdown */}
-                <div className="relative">
-                    <button 
-                        className="flex items-center space-x-2 bg-gray-800 px-4 py-2 rounded-lg text-white hover:bg-purple-600 transition"
-                        onClick={() => setShowAuthDropdown(!showAuthDropdown)}
-                    >
-                        {user ? (
-                            <>
-                                <FaUser className="text-lg" />
-                                <span>{user.name}</span>
-                            </>
-                        ) : (
-                            <>
-                                <FaUser className="text-lg" />
-                                <span>Login</span>
-                            </>
+                    <Link href="/notifications" className="relative">
+                        <FaBell className="text-2xl text-white hover:text-purple-400 cursor-pointer" />
+                        <span className="absolute -top-1 -right-1 text-xs font-bold text-white bg-red-500 rounded-full w-5 h-5 flex items-center justify-center animate-pulse">3</span>
+                    </Link>
+
+                    <div className="relative">
+                        <button
+                            className="flex items-center space-x-2 bg-gray-800 px-4 py-2 rounded-lg text-white hover:bg-purple-600 transition"
+                            onClick={() => toggleDropdown("auth")}
+                        >
+                            <FaUser className="text-lg" />
+                            <span>{user ? user.displayName || "User" : "Login"}</span>
+                            <FaChevronDown className={`text-sm transition-transform ${dropdowns.auth ? "rotate-180" : ""}`} />
+                        </button>
+                        {dropdowns.auth && (
+                            <div className="absolute right-0 mt-2 w-40 bg-gray-900 text-white rounded-lg shadow-lg">
+                                {user ? (
+                                    <>
+                                        <Link href="/profile" className="block px-4 py-2 hover:bg-purple-500">Profile</Link>
+                                        <button className="block w-full text-left px-4 py-2 hover:bg-purple-500" onClick={handleLogout}>Logout</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link href="/login" className="block px-4 py-2 hover:bg-purple-500">Login</Link>
+                                        <Link href="/Authform" className="block px-4 py-2 hover:bg-purple-500">Signup</Link>
+                                    </>
+                                )}
+                            </div>
                         )}
-                        <FaChevronDown className={`text-sm transition-transform ${showAuthDropdown ? "rotate-180" : ""}`} />
-                    </button>
-                    {showAuthDropdown && (
-                        <div className="absolute right-0 mt-2 w-40 bg-gray-900 text-white rounded-lg shadow-lg">
-                            {user ? (
-                                <button className="block w-full text-left px-4 py-2 hover:bg-purple-500" onClick={() => setUser(null)}>Logout</button>
-                            ) : (
-                                <>
-                                    <Link href="/login" className="block px-4 py-2 hover:bg-purple-500">Login</Link>
-                                    <Link href="/signup" className="block px-4 py-2 hover:bg-purple-500">Signup</Link>
-                                </>
-                            )}
-                        </div>
-                    )}
+                    </div>
                 </div>
             </div>
         </header>

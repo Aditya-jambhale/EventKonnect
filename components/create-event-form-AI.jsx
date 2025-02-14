@@ -42,10 +42,10 @@ const formSchema = z.object({
     organizerContact: z.string().min(10, "Please enter a valid contact number")
 });
 
-export function EventFormAI({eventDetails}) {
+export function EventFormAI({ eventDetails }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-   
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -111,7 +111,6 @@ export function EventFormAI({eventDetails}) {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <h2 className="text-2xl font-bold">📋 Event Details</h2>
-                    
                     <FormField control={form.control} name="title" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Event Title ✨</FormLabel>
@@ -132,141 +131,141 @@ export function EventFormAI({eventDetails}) {
                         </FormItem>
                     )} />
 
-<FormField control={form.control} name="imageUrl" render={({ field }) => (
-    <FormItem>
-        <FormLabel>Event Image URL 🖼️</FormLabel>
-        <FormControl>
-            <Input placeholder="Enter image URL..." {...field} />
-        </FormControl>
-        <FormMessage />
-    </FormItem>
-)} />
+                    <FormField control={form.control} name="imageUrl" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Event Image URL 🖼</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Enter image URL..." {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
 
-<div className="grid grid-cols-2 gap-4">
-    <FormField
-        control={form.control}
-        name="eventType"
-        render={({ field }) => (
-            <FormItem>
-                <FormLabel>Event Type 🎯</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select type" />
-                        </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                        <SelectItem value="conference">Conference</SelectItem>
-                        <SelectItem value="workshop">Workshop</SelectItem>
-                        <SelectItem value="seminar">Seminar</SelectItem>
-                        <SelectItem value="networking">Networking</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                </Select>
-                <FormMessage />
-            </FormItem>
-        )}
-    />
-
-    <FormField
-        control={form.control}
-        name="category"
-        render={({ field }) => (
-            <FormItem>
-                <FormLabel>Category 📊</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                        <SelectItem value="technology">Technology</SelectItem>
-                        <SelectItem value="business">Business</SelectItem>
-                        <SelectItem value="design">Design</SelectItem>
-                        <SelectItem value="marketing">Marketing</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                </Select>
-                <FormMessage />
-            </FormItem>
-        )}
-    />
-</div>
-
-<div className="grid grid-cols-2 gap-4">
-    <FormField
-        control={form.control}
-        name="date"
-        render={({ field }) => (
-            <FormItem>
-                <FormLabel>Date 📅</FormLabel>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <FormControl>
-                            <Button
-                                variant="outline"
-                                className={cn("w-full pl-3 text-left font-normal", 
-                                    !field.value && "text-muted-foreground")}
-                            >
-                                {field.value ? format(field.value, "PPP") : 
-                                    <span>Pick a date</span>}
-                                <CalendarIcon className="ml-auto h-4 w-4" />
-                            </Button>
-                        </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                        <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) => date < new Date()}
-                            initialFocus
+                    <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="eventType"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Event Type 🎯</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select type" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="conference">Conference</SelectItem>
+                                            <SelectItem value="workshop">Workshop</SelectItem>
+                                            <SelectItem value="seminar">Seminar</SelectItem>
+                                            <SelectItem value="networking">Networking</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </PopoverContent>
-                </Popover>
-                <FormMessage />
-            </FormItem>
-        )}
-    />
 
-    <FormField
-        control={form.control}
-        name="time"
-        render={({ field }) => (
-            <FormItem>
-                <FormLabel>Time ⏰</FormLabel>
-                <FormControl>
-                    <Input type="time" {...field} />
-                </FormControl>
-                <FormMessage />
-            </FormItem>
-        )}
-    />
-</div>
+                        <FormField
+                            control={form.control}
+                            name="category"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Category 📊</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select category" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="technology">Technology</SelectItem>
+                                            <SelectItem value="business">Business</SelectItem>
+                                            <SelectItem value="design">Design</SelectItem>
+                                            <SelectItem value="marketing">Marketing</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
 
-<FormField
-    control={form.control}
-    name="maxAttendees"
-    render={({ field }) => (
-        <FormItem>
-            <FormLabel>Maximum Attendees 👥</FormLabel>
-            <FormControl>
-                <Input 
-                    type="number" 
-                    placeholder="100" 
-                    min="1"
-                    {...field} 
-                />
-            </FormControl>
-            <FormMessage />
-        </FormItem>
-    )}
-/>
+                    <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="date"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Date 📅</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant="outline"
+                                                    className={cn("w-full pl-3 text-left font-normal",
+                                                        !field.value && "text-muted-foreground")}
+                                                >
+                                                    {field.value ? format(field.value, "PPP") :
+                                                        <span>Pick a date</span>}
+                                                    <CalendarIcon className="ml-auto h-4 w-4" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0">
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                disabled={(date) => date < new Date()}
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="time"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Time ⏰</FormLabel>
+                                    <FormControl>
+                                        <Input type="time" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <FormField
+                        control={form.control}
+                        name="maxAttendees"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Maximum Attendees 👥</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        placeholder="100"
+                                        min="1"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     {/* Venue Section */}
                     <div className="space-y-6">
                         <h2 className="text-2xl font-bold">📍 Venue Details</h2>
-                        
+
                         <FormField
                             control={form.control}
                             name="venueType"
@@ -350,9 +349,9 @@ export function EventFormAI({eventDetails}) {
                                         <FormItem>
                                             <FormLabel>Meeting Link 🔗</FormLabel>
                                             <FormControl>
-                                                <Input 
-                                                    placeholder="https://zoom.us/j/123456789" 
-                                                    {...field} 
+                                                <Input
+                                                    placeholder="https://zoom.us/j/123456789"
+                                                    {...field}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -363,19 +362,18 @@ export function EventFormAI({eventDetails}) {
                         )}
                     </div>
 
-                   {/* Previous code remains same until Pricing Section */}
+                    {/* Previous code remains same until Pricing Section */}
 
                     {/* Pricing Section */}
                     <div className="space-y-6">
                         <h2 className="text-2xl font-bold">💰 Pricing</h2>
-                        
                         <FormField
                             control={form.control}
                             name="isFreeEvent"
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                                     <div className="space-y-0.5">
-                                        <FormLabel className="text-base">Free Event 🎟️</FormLabel>
+                                        <FormLabel className="text-base">Free Event 🎟</FormLabel>
                                         <div className="text-sm text-muted-foreground">
                                             Toggle if this is a free event
                                         </div>
@@ -398,7 +396,7 @@ export function EventFormAI({eventDetails}) {
                                     <FormItem>
                                         <FormLabel>Ticket Price 💵</FormLabel>
                                         <FormControl>
-                                            <Input 
+                                            <Input
                                                 type="number"
                                                 placeholder="₹2999"
                                                 min="0"
@@ -415,7 +413,6 @@ export function EventFormAI({eventDetails}) {
                     {/* Organizer Details Section */}
                     <div className="space-y-6">
                         <h2 className="text-2xl font-bold">👤 Organizer Details</h2>
-                        
                         <div className="grid grid-cols-2 gap-4">
                             <FormField
                                 control={form.control}
@@ -438,7 +435,7 @@ export function EventFormAI({eventDetails}) {
                                     <FormItem>
                                         <FormLabel>Contact Number 📱</FormLabel>
                                         <FormControl>
-                                            <Input 
+                                            <Input
                                                 type="tel"
                                                 placeholder="+91 9876543210"
                                                 {...field}
@@ -452,8 +449,8 @@ export function EventFormAI({eventDetails}) {
                     </div>
 
                     {/* Submit Button */}
-                    <Button 
-                        type="submit" 
+                    <Button
+                        type="submit"
                         className="w-full"
                         disabled={loading}
                     >

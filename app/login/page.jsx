@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { signIn } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -9,6 +11,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("userEmail");
@@ -36,38 +39,17 @@ export default function Login() {
       );
       return;
     }
-
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetch("http://localhost:3000/api/Users/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-      setLoading(false);
-
-      if (response.ok) {
-        alert("Login Successful!");
-        localStorage.setItem("authToken", data.token);
-
-        if (rememberMe) {
-          localStorage.setItem("userEmail", email);
-        } else {
-          localStorage.removeItem("userEmail");
+                 
+      await signIn(email, password);
+      alert("User signed in successfully!");
+      setLoading(false)
+      router.push("/"); // Redirect after login/signup
+        } catch (err) {
+          setError(err.message);
         }
-
-        window.location.href = "/dashboard";
-      } else {
-        setErrorMessage(data.message || "Login failed. Please try again.");
-      }
-    } catch (error) {
-      setLoading(false);
-      setErrorMessage("Something went wrong. Please try again later.");
-    }
+    
   };
 
   return (
