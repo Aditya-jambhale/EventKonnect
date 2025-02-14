@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
     title: z.string().min(2, "Title must be at least 2 characters").max(100, "Title must be less than 100 characters"),
-    description: z.string().min(10, "Description must be at least 10 characters").max(500, "Description must be less than 500 characters"),
+    description: z.string().min(10, "Description must be at least 10 characters").max(600, "Description must be less than 500 characters"),
     image: z.string().url("Please enter a valid URL"),
     date: z.date({
         required_error: "Please select a date",
@@ -32,21 +32,22 @@ const formSchema = z.object({
     price: z.string().min(1, "Please enter a price"),
 });
 
-export function CreateEventForm() {
+export function CreateEventForm({eventDetails}) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: "",
-            description: "",
-            image: "",
-            time: "",
-            category: "",
-            city: "",
-            venue: "",
-            price: "",
+            title: eventDetails?.title || "",
+            description: eventDetails?.description || "",
+            image: eventDetails?.imageUrl || "",
+            date: eventDetails?.date ? new Date(eventDetails.date) : undefined,
+            time: eventDetails?.time || "",
+            category: eventDetails?.category || "",
+            city: eventDetails?.city || "",
+            venue: eventDetails?.venue || "",
+            price: eventDetails?.price || "",
         },
     });
 
