@@ -72,7 +72,7 @@ export default function DashboardPage() {
                             Create Event
                         </Button>
                     </Link>
-                    <Link href="/create-with-ai" className="flex-1">
+                    <Link href="/admin/create-with-ai" className="flex-1">
                         <Button className="w-full bg-purple-600 hover:bg-purple-700">
                             create with AI
                         </Button>

@@ -42,25 +42,23 @@ const formSchema = z.object({
     organizerContact: z.string().min(10, "Please enter a valid contact number")
 });
 
-export default function EventForm() {
+export function EventFormAI({ eventDetails }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: "",
-            description: "",
-            imageUrl: "",
-            category: "",
-            eventType: "",
-            time: "",
-            maxAttendees: "",
-            venueType: "physical",
-            isFreeEvent: false,
-            organizerName: "",
-            organizerContact: ""
-        }
+            title: eventDetails?.title || "",
+            description: eventDetails?.description || "",
+            image: eventDetails?.imageUrl || "",
+            date: eventDetails?.date ? new Date(eventDetails.date) : undefined,
+            time: eventDetails?.time || "",
+            category: eventDetails?.category || "",
+            city: eventDetails?.city || "",
+            venue: eventDetails?.venue || "",
+            price: eventDetails?.price || "",
+        },
     });
     const venueType = form.watch("venueType");
     const isFreeEvent = form.watch("isFreeEvent");
@@ -136,7 +134,7 @@ export default function EventForm() {
 
                     <FormField control={form.control} name="imageUrl" render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Event Image URL 🖼️</FormLabel>
+                            <FormLabel>Event Image URL 🖼</FormLabel>
                             <FormControl>
                                 <Input placeholder="Enter image URL..." {...field} />
                             </FormControl>
@@ -377,7 +375,7 @@ export default function EventForm() {
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                                     <div className="space-y-0.5">
-                                        <FormLabel className="text-base">Free Event 🎟️</FormLabel>
+                                        <FormLabel className="text-base">Free Event 🎟</FormLabel>
                                         <div className="text-sm text-muted-foreground">
                                             Toggle if this is a free event
                                         </div>

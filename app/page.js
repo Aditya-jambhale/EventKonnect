@@ -78,27 +78,27 @@ export default function Home() {
           {/* Sidebar */}
           <aside className="space-y-8">
             {/* Date Picker */}
-            <div className="flex items-center justify-between bg-background p-4 rounded-lg shadow-md border border-gray-300">
+            <div className="flex items-center justify-between bg-background p-4 rounded-lg shadow-md border border-gray-300 transition-all duration-300 hover:shadow-lg hover:border-purple-500">
               <span className="text-sm font-medium text-white">
                 {selectedDate ? selectedDate.toDateString() : 'Select Date'}
               </span>
-              <Button variant="outline" size="sm" className="flex items-center gap-2 text-white border-gray-400 hover:bg-gray-800">
+              <Button variant="outline" size="sm" className="flex items-center gap-2 text-white border-gray-400 hover:bg-purple-700 transition">
                 <Calendar className="w-4 h-4" />
                 Pick Date
               </Button>
             </div>
 
             {/* Calendar */}
-            <div className="rounded-lg bg-background p-4 shadow-md border border-white">
+            <div className="rounded-lg bg-background p-4 shadow-md border border-white transition-all duration-300  hover:shadow-lg hover:border-purple-500">
               <DayPicker
                 showOutsideDays
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 classNames={{
-                  day_selected: "bg-primary text-primary-foreground",
-                  day_today: "bg-accent text-accent-foreground",
-                  day: "hover:bg-gray-800 rounded-md"
+                  day_selected: "bg-purple-600 text-white",
+                  day_today: "bg-purple-500 text-white",
+                  day: "hover:bg-purple-700 hover:text-purple-800 rounded-md transition-all"
                 }}
                 components={{
                   IconLeft: () => <ChevronLeft className="h-4 w-4 text-white" />,
@@ -108,7 +108,7 @@ export default function Home() {
             </div>
 
             {/* Your Groups Section */}
-            <div className="rounded-lg border border-white p-6 bg-background">
+            <div className="rounded-lg border border-white p-6 bg-background transition-all duration-300 hover:shadow-lg hover:border-purple-500">
               <div className="flex items-center gap-2 mb-4">
                 <Users className="w-5 h-5 text-purple-500" />
                 <h2 className="font-semibold text-white text-lg">Your Groups</h2>
@@ -116,7 +116,7 @@ export default function Home() {
               <div className="space-y-4">
                 {userGroups.length > 0 ? (
                   userGroups.map((group) => (
-                    <div key={group.id} className="flex items-center gap-3 hover:bg-gray-800 p-2 rounded-lg transition-colors cursor-pointer">
+                    <div key={group.id} className="flex items-center gap-3 hover:bg-purple-700 p-2 rounded-lg transition-all cursor-pointer">
                       <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                         <GroupImage src={group.image} alt={group.name} />
                       </div>
@@ -144,21 +144,37 @@ export default function Home() {
                   key={category}
                   onClick={() => setSelectedCategory(category)}
                   variant={selectedCategory === category ? "default" : "outline"}
-                  className="shrink-0 text-white border-gray-400 hover:bg-gray-800 px-6"
+                  className="shrink-0 text-white bg-gray-900 border-white hover:bg-purple-700 transition-all px-6"
                 >
                   {category}
                 </Button>
               ))}
             </div>
 
+
             {/* Events Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="flex justify-center items-center min-h-[300px]">
               {filteredEvents.length > 0 ? (
-                filteredEvents.map(event => <EventCard key={event.id} {...event} />)
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredEvents.map(event => (
+                    <div key={event.id} className="transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                      <EventCard {...event} />
+                    </div>
+                  ))}
+                </div>
               ) : (
-                <p className="text-center text-gray-400">Nothing is Lined up for now :( come again next time;</p>
+                <div className="flex flex-col items-center text-center">
+                  <span className="text-4xl md:text-5xl lg:text-6xl">📅😔</span>
+                  <p className="text-white text-lg md:text-xl font-semibold mt-4">
+                    Oops! No events scheduled at the moment.
+                  </p>
+                  <p className="text-gray-400 text-sm md:text-base">
+                    Check back later for exciting updates! 🚀
+                  </p>
+                </div>
               )}
             </div>
+
           </section>
         </div>
       </main>
