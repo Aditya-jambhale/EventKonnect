@@ -4,13 +4,13 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export function EventCard({ id, title, description, image, date, time, likes, venue, price, attendees }) {
+export function EventCard({ id, title, description, imageUrl, date, time, likes, venue, price, currentAttendees, maxAttendees }) {
     return (
         <Card className="overflow-hidden border-purple-500/20 transition-all hover:border-purple-500/40 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
             <Link href={`/event/${id}`}>
                 <div className="aspect-video relative">
                     <img
-                        src={image || "/placeholder.svg"}
+                        src={imageUrl || "/placeholder.svg"}
                         alt={title}
                         className="object-cover w-full h-full transition-transform hover:scale-105"
                     />
@@ -24,9 +24,13 @@ export function EventCard({ id, title, description, image, date, time, likes, ve
                     <MapPin className="h-4 w-4 mr-1 shrink-0" />
                     <span className="truncate w-full overflow-hidden">{venue}</span>
                 </div>
+                <div className="flex items-center text-sm text-muted-foreground mb-2">
+                    <Users className="h-4 w-4 mr-1 " />
+                    <span>{currentAttendees} attending</span>
+                </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                     <Users className="h-4 w-4 mr-1" />
-                    <span>{attendees} attending</span>
+                    <span>{maxAttendees} Total Spots</span>
                 </div>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex flex-col sm:flex-row items-start sm:items-center justify-between">
