@@ -94,7 +94,7 @@ export function Sidebar() {
                                 </div>
                             </Link>
                         );
-                    })}
+                    })} 
                 </div>
             </div>
         </div>
