@@ -50,7 +50,7 @@ const routes = [
     {
         label: "Profile",
         icon: UserCircle,
-        href: "/dashboard/profile",
+        href: "/profile",
         emoji: "👤",
     },
 
