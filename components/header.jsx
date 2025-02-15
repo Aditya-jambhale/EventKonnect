@@ -106,8 +106,8 @@ export function Header() {
                                     </>
                                 ) : (
                                     <>
-                                        <Link href="/login" className="block px-4 py-2 hover:bg-purple-500">Login</Link>
-                                        <Link href="/Authform" className="block px-4 py-2 hover:bg-purple-500">Signup</Link>
+                                        <Link href="/Authform" className="block px-4 py-2 hover:bg-purple-500">Login</Link>
+                                        <Link href="/signup" className="block px-4 py-2 hover:bg-purple-500">Signup</Link>
                                     </>
                                 )}
                             </div>

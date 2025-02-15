@@ -22,14 +22,14 @@ export function EventCard({
   const router = useRouter();
 
   // Function to handle card click
-  const handleCardClick = () => {
-    router.push(`/Eventdes/${id}`);
+  const handleCardClick = (eventId) => {
+    router.push(`/events/${id}`);
   };
 
   return (
     <Card
       className="overflow-hidden border-purple-500/20 transition-all hover:border-purple-500/40 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto cursor-pointer"
-      onClick={handleCardClick}
+      onClick={() => handleCardClick()}
     >
       <div className="aspect-video relative">
         <img

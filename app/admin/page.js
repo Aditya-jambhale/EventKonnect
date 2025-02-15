@@ -126,7 +126,7 @@ export default function DashboardPage() {
                                             <div className="flex items-center justify-between text-sm">
                                                 <div className="flex items-center">
                                                     <Users className="h-4 w-4 mr-2 text-purple-400" />
-                                                    {event.attendees} attendees
+                                                    {event.currentAttendees} attendees
                                                 </div>
                                                 <div className="flex items-center">
                                                     <Heart className="h-4 w-4 mr-2 text-purple-400" />

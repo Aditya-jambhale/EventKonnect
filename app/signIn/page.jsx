@@ -1,25 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { signUp } from "@/lib/auth";
+import { signIn } from "@/lib/auth";
 import { useRouter } from "next/navigation";
-import { User, Mail, Lock, Phone, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 
-export default function SignUp() {
-    const [name, setName] = useState("");
+export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [phone, setPhone] = useState("");
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
-    const handleSignUp = async () => {
+    const handleSignIn = async () => {
         setError(null);
         setIsLoading(true);
         try {
-            await signUp(name, email, password, phone);
-            router.push("/signin");
+            await signIn(email, password);
+            router.push("/");
         } catch (err) {
             setError(err.message);
         } finally {
@@ -32,7 +30,7 @@ export default function SignUp() {
             <div className="w-full max-w-md transform transition-all duration-300 hover:scale-[1.01]">
                 <div className="backdrop-blur-lg bg-gray-800/80 p-8 rounded-2xl shadow-2xl border border-purple-500/20">
                     <h2 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        Sign Up
+                        Sign In
                     </h2>
 
                     {error && (
@@ -42,21 +40,6 @@ export default function SignUp() {
                     )}
 
                     <div className="space-y-6">
-                        <div className="relative">
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
-                            <div className="relative">
-                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="w-full px-10 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none text-white placeholder-gray-400"
-                                    placeholder="Enter your full name"
-                                    required
-                                />
-                            </div>
-                        </div>
-
                         <div className="relative">
                             <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
                             <div className="relative">
@@ -87,23 +70,8 @@ export default function SignUp() {
                             </div>
                         </div>
 
-                        <div className="relative">
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
-                            <div className="relative">
-                                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                <input
-                                    type="tel"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    className="w-full px-10 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none text-white placeholder-gray-400"
-                                    placeholder="Enter your phone number"
-                                    required
-                                />
-                            </div>
-                        </div>
-
                         <button
-                            onClick={handleSignUp}
+                            onClick={handleSignIn}
                             disabled={isLoading}
                             className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium 
                             hover:from-purple-600 hover:to-pink-600 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 
@@ -114,18 +82,25 @@ export default function SignUp() {
                                 <Loader2 className="animate-spin h-5 w-5" />
                             ) : (
                                 <>
-                                    <span>Sign Up</span>
+                                    <span>Sign In</span>
                                     <ArrowRight className="h-5 w-5" />
                                 </>
                             )}
                         </button>
 
-                        <p className="text-sm text-center mt-6 text-gray-400">
-                            Already have an account?{" "}
-                            <a href="/signIn" className="text-purple-400 hover:text-purple-300 hover:underline transition-all duration-200">
-                                Sign In
-                            </a>
-                        </p>
+                        <div className="space-y-4">
+                            <p className="text-sm text-center text-gray-400">
+                                New user?{" "}
+                                <a href="/signup" className="text-purple-400 hover:text-purple-300 hover:underline transition-all duration-200">
+                                    Sign Up
+                                </a>
+                            </p>
+                            <p className="text-sm text-center">
+                                <a href="/forgot-password" className="text-gray-400 hover:text-gray-300 transition-all duration-200">
+                                    Forgot your password?
+                                </a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
