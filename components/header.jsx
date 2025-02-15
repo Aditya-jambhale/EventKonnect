@@ -50,7 +50,17 @@ export function Header() {
                                 <Link href="/" className="text-lg font-semibold hover:text-purple-400">Home</Link>
                                 <Link href="/admin" className="text-lg hover:text-purple-400">Create Event</Link>
                                 <Link href="/notifications" className="text-lg hover:text-purple-400">Notifications</Link>
-                                {user && <Link href="/profile" className="text-lg hover:text-purple-400">Profile</Link>}
+                                {user ? (
+                                    <>
+                                        <Link href="/profile" className="text-lg hover:text-purple-400">Profile</Link>
+                                        <button className="text-lg hover:text-purple-400 text-left" onClick={handleLogout}>Logout</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link href="/signIn" className="text-lg hover:text-purple-400">Login</Link>
+                                        <Link href="/signup" className="text-lg hover:text-purple-400">Signup</Link>
+                                    </>
+                                )}
                             </nav>
                         </SheetContent>
                     </Sheet>
