@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { FaUser, FaBell, FaMapMarkerAlt, FaSearch, FaChevronDown } from "react-icons/fa";
+import { FaUser, FaBell, FaSearch, FaChevronDown } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 import Image from "next/image";
-import { auth } from "@/lib/firebase"; // Ensure Firebase is properly configured
+import { auth } from "@/lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export function Header() {
     const [user, setUser] = useState(null);
-    const [dropdowns, setDropdowns] = useState({ city: false, auth: false });
+    const [dropdowns, setDropdowns] = useState({ auth: false });
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -26,20 +26,14 @@ export function Header() {
         setUser(null);
     };
 
-    const toggleDropdown = (dropdown) => {
-        setDropdowns((prev) => ({
-            ...prev,
-            [dropdown]: !prev[dropdown],
-        }));
-    };
-
     return (
-        <header className="sticky top-0 z-50 border-b border-border/40 bg-gray-900 backdrop-blur-md">
+        <header className="sticky top-0 z-50 border-b bg-gray-900 backdrop-blur-md">
             <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-6">
-                <div className="flex items-center space-x-4">
+                {/* Mobile Menu */}
+                <div className="flex items-center space-x-4 md:hidden">
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className="md:hidden">
+                            <Button variant="ghost" size="icon">
                                 <Menu className="h-6 w-6 text-white" />
                             </Button>
                         </SheetTrigger>
@@ -60,13 +54,15 @@ export function Header() {
                             </nav>
                         </SheetContent>
                     </Sheet>
-
-                    <Link href="/" className="flex items-center space-x-2">
-                        <Image src="/logo.webp" alt="Logo" width={40} height={40} className="rounded-full" />
-                        <span className="font-bold text-white text-2xl">EventKonnect</span>
-                    </Link>
                 </div>
 
+                {/* Logo */}
+                <Link href="/" className="flex items-center space-x-2">
+                    <Image src="/logo.webp" alt="Logo" width={40} height={40} className="rounded-full" />
+                    <span className="font-bold text-white text-2xl">EventKonnect</span>
+                </Link>
+
+                {/* Search Bar */}
                 <div className="hidden md:flex flex-1 max-w-md relative">
                     <input
                         type="text"
@@ -76,6 +72,7 @@ export function Header() {
                     <FaSearch className="absolute right-3 top-2.5 text-gray-400 text-lg" />
                 </div>
 
+                {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center space-x-6">
                     <Link href="/admin">
                         <Button className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 px-6 py-2 rounded-lg text-white shadow-lg transition-transform transform hover:scale-105">
@@ -88,10 +85,11 @@ export function Header() {
                         <span className="absolute -top-1 -right-1 text-xs font-bold text-white bg-red-500 rounded-full w-5 h-5 flex items-center justify-center animate-pulse">3</span>
                     </Link>
 
+                    {/* User Dropdown */}
                     <div className="relative">
                         <button
                             className="flex items-center space-x-2 bg-gray-800 px-4 py-2 rounded-lg text-white hover:bg-purple-600 transition"
-                            onClick={() => toggleDropdown("auth")}
+                            onClick={() => setDropdowns({ auth: !dropdowns.auth })}
                         >
                             <FaUser className="text-lg" />
                             <span>{user ? user.displayName || "User" : "Login"}</span>
@@ -106,7 +104,7 @@ export function Header() {
                                     </>
                                 ) : (
                                     <>
-                                        <Link href="/Authform" className="block px-4 py-2 hover:bg-purple-500">Login</Link>
+                                        <Link href="/signIn" className="block px-4 py-2 hover:bg-purple-500">Login</Link>
                                         <Link href="/signup" className="block px-4 py-2 hover:bg-purple-500">Signup</Link>
                                     </>
                                 )}
