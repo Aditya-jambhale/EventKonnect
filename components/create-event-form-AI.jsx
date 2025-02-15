@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getAuth } from "firebase/auth"; 
 import { database, ref, push, set } from "@/lib/firebase";
 import { CalendarIcon, Clock, MapPin, Globe } from "lucide-react";
 import { format } from "date-fns";
@@ -37,9 +38,7 @@ const formSchema = z.object({
     platform: z.string().optional(),
     meetingLink: z.string().url().optional(),
     isFreeEvent: z.boolean(),
-    price: z.string().optional(),
-    organizerName: z.string().min(2, "Please enter organizer name"),
-    organizerContact: z.string().min(10, "Please enter a valid contact number")
+    price: z.string().optional()
 });
 
 export function EventFormAI({ eventDetails }) {
@@ -57,7 +56,7 @@ export function EventFormAI({ eventDetails }) {
             category: eventDetails?.category || "",
             city: eventDetails?.city || "",
             venue: eventDetails?.venue || "",
-            price: eventDetails?.price || "",
+            price: eventDetails?.price || ""
         },
     });
     const venueType = form.watch("venueType");
@@ -67,6 +66,12 @@ export function EventFormAI({ eventDetails }) {
         try {
             setLoading(true);
 
+            const auth = getAuth();
+                        const user = auth.currentUser;
+                        if (!user) {
+                         throw new Error("User is not authenticated.");
+                        }
+            
             const eventsRef = ref(database, "events");
             const newEventRef = push(eventsRef);
 
@@ -84,8 +89,10 @@ export function EventFormAI({ eventDetails }) {
                 ...(values.venueType === "physical" ? { venue: values.venue, city: values.city } : { platform: values.platform, meetingLink: values.meetingLink }),
                 isFreeEvent: values.isFreeEvent,
                 price: values.isFreeEvent ? "0" : values.price,
-                organizerName: values.organizerName,
-                organizerContact: values.organizerContact,
+                organizer: {uid: user.uid,
+                            name: user.displayName,
+                            email: user.email
+                            },
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
                 status: "active",
@@ -411,7 +418,7 @@ export function EventFormAI({ eventDetails }) {
                     </div>
 
                     {/* Organizer Details Section */}
-                    <div className="space-y-6">
+                    {/* <div className="space-y-6">
                         <h2 className="text-2xl font-bold">👤 Organizer Details</h2>
                         <div className="grid grid-cols-2 gap-4">
                             <FormField
@@ -446,7 +453,7 @@ export function EventFormAI({ eventDetails }) {
                                 )}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Submit Button */}
                     <Button

@@ -1,36 +1,72 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { database, ref, get } from "@/lib/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { database, ref, get} from "@/lib/firebase";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Users, Heart, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-async function fetchEvents() {
-    const eventsRef = ref(database, "events");
+// async function fetchEvents() {
+//     const eventsRef = ref(database, "events");
+//     const snapshot = await get(eventsRef);
+//     const events = snapshot.val();
+//     return Object.values(events || []);
+// }
+const fetchEvents = async () => {
+  const eventsRef = ref(database, "events");
+  const auth = getAuth();
+  const user = auth.currentUser;
+  try {
     const snapshot = await get(eventsRef);
-    const events = snapshot.val();
-    return Object.values(events || []);
-}
+    if (snapshot.exists()) {
+      const allEvents = snapshot.val();
+      // Manually filter events for the current user
+      const filteredEvents = Object.values(allEvents).filter(
+        (event) => event.organizer?.uid === user.uid
+      );
+    //   console.log(filteredEvents);
+      return filteredEvents;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  }
+};
 
 export default function DashboardPage() {
+    const [user, setUser] = useState(null);
     const [events, setEvents] = useState([]);
     const [isClient, setIsClient] = useState(false);
 
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    // useEffect(() => {
+    //     setIsClient(true);
+    // }, []);
 
-    useEffect(() => {
-        if (!isClient) return;
+    // useEffect(() => {
+    //     if (!isClient) return;
         
-        async function loadEvents() {
-            const eventData = await fetchEvents();
-            setEvents(eventData);
+    //     async function loadEvents() {
+    //         const eventData = await fetchEvents();
+    //         setEvents(eventData);
+    //     }
+    //     loadEvents();
+    // }, [isClient]);
+    useEffect(() => {
+      setIsClient(true);
+
+      const auth = getAuth();
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        if (currentUser) {
+          fetchEvents(currentUser).then(setEvents).catch(console.error);
         }
-        loadEvents();
-    }, [isClient]);
+      });
+
+      return () => unsubscribe();
+    }, []);
 
     const checklist = [
         "Fill profile",
