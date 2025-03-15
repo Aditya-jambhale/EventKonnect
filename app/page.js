@@ -71,10 +71,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+    <Header/>
       <main className="container mx-auto py-8 px-4 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
-
           {/* Sidebar */}
           <aside className="space-y-8">
             {/* Date Picker */}
