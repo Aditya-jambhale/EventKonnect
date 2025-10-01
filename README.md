@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎉 EventKonnect
 
-## Getting Started
+EventKonnect is an **open-source Event Management Platform** built with [Next.js](https://nextjs.org/).  
+It helps organizers create, manage, and promote events while providing attendees with seamless booking and notifications.  
 
-First, run the development server:
+This repo is part of **Hacktoberfest** 🍂 – contributions are welcome!
 
+---
+
+## ✨ Features (Planned & Ongoing)
+- 🔐 User Authentication (Sign In / Sign Up with Firebase & NextAuth)
+- 🎟️ Create & Manage Events
+- 📅 Event Booking System
+- 🔔 Notifications & Reminders
+- 📊 Admin Dashboard with Analytics (Recharts)
+- 🎨 Modern UI with Tailwind + shadcn/ui + Radix UI
+- 📱 Responsive Design + PWA support
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)  
+- **Frontend**: React 18, TailwindCSS, shadcn/ui, Radix UI, Framer Motion  
+- **Backend / APIs**: Next.js API routes, Firebase, Axios  
+- **Auth**: [NextAuth.js](https://next-auth.js.org/) + Firebase  
+- **State Management**: Redux Toolkit  
+- **Forms & Validation**: React Hook Form + Zod  
+- **Charts & Analytics**: Recharts  
+- **UI Enhancements**: React Icons, Lucide, Toastify, SweetAlert2  
+- **Other Utilities**: date-fns, uuid, dotenv  
+- **PWA Support**: next-pwa + workbox  
+
+---
+
+## 📂 Project Structure
+
+eventkonnect/
+│── app/ # Next.js App Router
+│ ├── admin/ # Admin pages
+│ ├── api/ # API routes
+│ ├── create-event/ # Event creation pages
+│ ├── events/ # Event listing & details
+│ ├── notifications/ # User notifications
+│ ├── profile/ # User profile
+│ ├── signIn/ # Login page
+│ ├── signup/ # Register page
+│ ├── Eventdetails.jsx # Single event details
+│ ├── layout.js # Main layout
+│ └── page.js # Homepage
+│
+│── components/ # Shared UI components
+│ ├── ui/ # UI widgets (cards, forms, modals)
+│ └── dashboard/ # Dashboard-specific components
+│
+│── public/ # Static assets
+│── styles/ # Global styles (Tailwind, globals.css)
+│── data/ # Mock or static data
+│── package.json
+│── README.md
+
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
 ```bash
+git clone https://github.com/<your-username>/eventkonnect.git
+cd eventkonnect
+
+Install Dependencies 
+
+npm install
+# or
+yarn install
+# or
+pnpm install
+
+command to Run the server 
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
